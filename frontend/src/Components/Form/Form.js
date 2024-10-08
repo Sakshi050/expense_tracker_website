@@ -7,7 +7,7 @@ import Button from '../Button/Button'
 import { plus } from '../../utils/icons'
 
 function Form() {
-    const { addIncome } = useGlobalContext()
+    const { addIncome, getIncomes, error, setError } = useGlobalContext()
     const [inputState, setInputState] = useState({
         title: '',
         amount: '',
@@ -18,14 +18,25 @@ function Form() {
     const { title, amount, date, category, description } = inputState;
     const handleInput = name => e => {
         setInputState({ ...inputState, [name]: e.target.value })
+        setError('')    // to  clear error message when input is changed or u start typing
+
     }
 
     const handleSubmit = e => {
         e.preventDefault()
         addIncome(inputState)      //payload
+        // getIncomes();
+        setInputState({
+            title: '',
+            amount: '',
+            date: '',
+            category: '',
+            description: '',
+        })
     }
     return (
         <FormStyled onSubmit={handleSubmit}>
+            {error && <p className='error'>{error}</p>}
             <div className='input-control'>
                 <input
                     type='text'
@@ -107,7 +118,7 @@ const FormStyled = styled.form`
     }
     .input-control{
         input{
-            width: 800px;
+            width: 500px;
         }
     }
 
